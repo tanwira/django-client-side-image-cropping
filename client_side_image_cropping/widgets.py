@@ -1,4 +1,5 @@
-import base64, io, random, string, typing
+import base64, io, string, typing
+from .utils import py36_choices as choices
 
 from django.db.models.fields.files import FieldFile
 from django.forms import Widget
@@ -63,7 +64,7 @@ class ClientsideCroppingWidget(Widget):
         elif isinstance(value, FieldFile): # Object is being edited and has already an image for this field.
             context['current_img_url'] = value.url if value else ""
         else:
-            raise ValueError(f"Unexpected value for field '{name}'.")
+            raise ValueError("Unexpected value for field {}.".format(name))
 
         return context
 
@@ -77,7 +78,7 @@ class ClientsideCroppingWidget(Widget):
         if self.file_name:
             file_name = self.file_name
         else:
-            file_name = "".join(random.choices(FILENAME_CHARACTERS, k=24)) + '.' + self.widget_context['res_format']
+            file_name = "".join(choices(FILENAME_CHARACTERS, k=24)) + '.' + self.widget_context['res_format']
 
         # The cropped image is base64-encoded and saved in a hidden input, because Internet Explorer doesn't provide
         # the HTML5 File API.
