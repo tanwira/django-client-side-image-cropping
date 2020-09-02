@@ -32,8 +32,10 @@ Let your Admin classes inherit from `DcsicAdminMixin`, which will instruct the a
 
     from client_side_image_cropping import DcsicAdminMixin
     
-    class EbookAdmin(admin.ModelAdmin, DcsicAdminMixin):
+    class EbookAdmin(DcsicAdminMixin, admin.ModelAdmin):
         form = EbookForm
+
+Remember the order of inheritance! `DcsicAdminMixin` should come first; otherwise, you will get an error.
 
 ### For generic forms
 
