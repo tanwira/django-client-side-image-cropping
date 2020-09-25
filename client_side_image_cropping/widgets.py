@@ -1,6 +1,7 @@
-import base64, io, string, typing
+import base64, io, string, typing, os
 from .utils import py36_choices as choices
 
+from django.conf import settings
 from django.db.models.fields.files import FieldFile
 from django.forms import Widget
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -63,6 +64,8 @@ class ClientsideCroppingWidget(Widget):
             context['original_uploaded_data'] = value.original_uploaded_data
         elif isinstance(value, FieldFile): # Object is being edited and has already an image for this field.
             context['current_img_url'] = value.url if value else ""
+        elif isinstance(value, str): # Object has a default image path as a string.
+            context['current_img_url'] = os.path.join(settings.MEDIA_URL, value)
         else:
             raise ValueError("Unexpected value for field {}.".format(name))
 
