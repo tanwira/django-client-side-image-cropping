@@ -1,15 +1,24 @@
 {% load i18n %}
 
 <div class="dcsic_wrapper{% if current_img_url %} has_image{% endif %}" data-res-width="{{ widget.res_width }}" data-res-height="{{ widget.res_height }}" data-res-format="{{ widget.res_format }}" data-res-quality="{{ widget.res_quality }}">
-    <input type="hidden" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}{% if original_uploaded_data %} value="{{ original_uploaded_data }}"{% endif %}>
+
+    {% if not widget.attrs.disabled %}
+        <input type="hidden" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}{% if original_uploaded_data %} value="{{ original_uploaded_data }}"{% endif %}>
+    {% endif %}
+
     <img src="{{ current_img_url }}" class="dcsic_current_img" style="width: {{ widget.preview_width }}px; height: {{ widget.preview_height }}px " />
-    <label>
-        <span class="dcsic_choose_img">{% trans "Choose image" %}</span>
-        <span class="dcsic_choose_other_img">{% trans "Choose other image" %}</span>
-        <input type="file" class="dcsic_file_input" accept="image/*"/>
-    </label>
-    {% if input_clearable %}<span class="dcsic_delete_image">{% trans "Delete image" %}</span>{% endif %}
+
+    {% if not widget.attrs.disabled %}
+        <label>
+            <span class="dcsic_choose_img">{% trans "Choose image" %}</span>
+            <span class="dcsic_choose_other_img">{% trans "Choose other image" %}</span>
+            <input type="file" class="dcsic_file_input" accept="image/*"/>
+        </label>
+        {% if input_clearable %}<span class="dcsic_delete_image">{% trans "Delete image" %}</span>{% endif %}
+    {% endif %}
 </div>
+
+{% if not widget.attrs.disabled %}
 <div class="dcsic_overlay"><div class="dcsic_dialog">
     <div class="dcsic_croppie_container"></div>
     <div class="dcsic_buttons">
@@ -17,3 +26,4 @@
         <div><div class="dcsic_cancel">{% trans "Cancel" %}</div><div class="dcsic_ok">{% trans "OK" %}</div></div>
     </div>
 </div></div>
+{% endif %}
